@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="ms">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Detektif Bahasa Melayu</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #111827, #312e81, #4f46e5);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #1f2937;
+        }
+
+        .game-container {
+            width: 90%;
+            max-width: 900px;
+            background: white;
+            border-radius: 30px;
+            padding: 35px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 80px;
+        }
+
+        h1 {
+            color: #312e81;
+            font-size: 42px;
+            margin: 10px 0;
+        }
+
+        h2 {
+            color: #4f46e5;
+        }
+
+        .subtitle {
+            font-size: 20px;
+            color: #6b7280;
+        }
+
+        .mission-box {
+            background: #eef2ff;
+            padding: 20px;
+            border-radius: 20px;
+            margin: 25px 0;
+        }
+
+        .start-button {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 15px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .start-button:hover {
+            transform: scale(1.05);
+            background: #3730a3;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            background: #f3f4f6;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
+
+        .question {
+             font-size: 24px;
+    font-weight: bold;
+    margin: 25px 0;
+    background: #f8fafc;
+    padding: 25px;
+    border-radius: 20px;
+    border-left: 8px solid #4f46e5;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .answer-button {
+           display: block;
+    width: 100%;
+    margin: 14px 0;
+    padding: 20px;
+    border: 3px solid #c7d2fe;
+    background: white;
+    border-radius: 18px;
+    font-size: 18px;
+    cursor: pointer;
+    text-align: left;
+    font-weight: bold;
+    transition: all 0.2s ease;
+        }
+
+        .answer-button:hover {
+                background: #eef2ff;
+    border-color: #4f46e5;
+    transform: translateX(8px);
+    box-shadow: 0 5px 15px rgba(79,70,229,0.15);
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 18px;
+            border-radius: 15px;
+            font-weight: bold;
+        }
+
+        .correct {
+             background: #dcfce7;
+    color: #166534;
+    border: 3px solid #22c55e;
+    border-radius: 18px;
+    font-size: 19px;
+    animation: pop 0.4s ease;
+        }
+
+        .wrong {
+        .wrong {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 3px solid #ef4444;
+    border-radius: 18px;
+    font-size: 19px;
+    animation: shake 0.4s ease;
+}
+        }
+
+        .next-button {
+            margin-top: 20px;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 12px;
+            background: #059669;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+        }.clue {
+    margin-top: 18px;
+    padding: 18px;
+    background: #fef3c7;
+    color: #92400e;
+    border: 3px solid #f59e0b;
+    border-radius: 18px;
+    font-size: 19px;
+    font-weight: bold;
+    animation: pop 0.5s ease;
+}
+@keyframes pop {
+    0% { transform: scale(0.8); }
+    100% { transform: scale(1); }
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    50% { transform: translateX(8px); }
+    75% { transform: translateX(-8px); }
+    100% { transform: translateX(0); }
+}
+        .hidden {
+            display: none;
+        }
+.progress-container {
+    width: 100%;
+    height: 18px;
+    background: #e5e7eb;
+    border-radius: 20px;
+    margin: 20px 0;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 16.6%;
+    background: linear-gradient(90deg, #4f46e5, #7c3aed);
+    border-radius: 20px;
+    transition: width 0.5s ease;
+}
+        .stars {
+            font-size: 35px;
+            margin: 15px;
+        }
+
+        .rank {
+            font-size: 28px;
+            font-weight: bold;
+            color: #312e81;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="game-container">
+
+    <!-- SKRIN MULA -->
+
+    <div id="startScreen">
+
+        <div class="logo">🕵️‍♂️</div>
+
+        <h1>DETektif Bahasa Melayu</h1>
+
+        <h2>🔐 Misteri Ayat Hilang</h2>
+
+        <p class="subtitle">
+            Misi khas untuk Detektif Tahun 5
+        </p>
+
+        <div class="mission-box">
+
+            <p>
+                🚨 Sebuah fail rahsia telah hilang!
+            </p>
+
+            <p>
+                Kamu perlu menyelesaikan 6 misi
+                untuk mencari fail tersebut.
+            </p>
+
+            <p>
+                🔎 Cari petunjuk<br>
+                🧠 Jawab soalan<br>
+                ⭐ Kumpul mata<br>
+                🏆 Naik pangkat
+            </p>
+
+        </div>
+
+        <button class="start-button" onclick="startGame()">
+            🚀 MULA MISI
+        </button>
+
+    </div>
+
+
+    <!-- SKRIN GAME -->
+
+    <div id="gameScreen" class="hidden">
+
+        <div class="top-bar">
+
+            <span>
+                🔎 Level:
+                <span id="level">1</span>/6
+            </span>
+
+            <span>
+                ⭐ Mata:
+                <span id="score">0</span>
+            </span>
+
+            <span>
+                ❤️ Nyawa:
+                <span id="lives">3</span>
+            </span>
+
+        </div>
+<div class="progress-container">
+    <div id="progressBar" class="progress-bar"></div>
+</div>
+        <h2 id="levelTitle">
+            LEVEL 1 — JEJAK SUBJEK
+        </h2>
+
+        <div class="question" id="question">
+        </div>
+
+        <div id="answers">
+        </div>
+
+        <div id="feedback" class="hidden">
+        </div>
+<div id="clue" class="clue hidden">
+    🔎 PETUNJUK DITEMUI!
+    <br>
+    <span id="clueText"></span>
+</div>
+        <button
+            id="nextButton"
+            class="next-button hidden"
+            onclick="nextQuestion()">
+
+            ➡️ PETUNJUK SETERUSNYA
+
+        </button>
+
+    </div>
+
+
+    <!-- SKRIN TAMAT -->
+
+    <div id="endScreen" class="hidden">
+
+        <div class="logo">🏆</div>
+
+        <h1>🎉 KES SELESAI!</h1>
+
+        <div class="stars" id="finalStars">
+            ⭐⭐⭐
+        </div>
+
+        <p>
+            Jumlah Mata:
+        </p>
+
+        <h2 id="finalScore">
+            0
+        </h2>
+
+        <div class="rank" id="finalRank">
+            DETEKTIF BARU
+        </div>
+
+        <p>
+            Tahniah! Kamu telah berjaya
+            menyelesaikan Misteri Ayat Hilang.
+        </p>
+
+        <button
+            class="start-button"
+            onclick="location.reload()">
+
+            🔄 MAIN SEMULA
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+let currentQuestion = 0;
+
+let score = 0;
+
+let lives = 3;
+
+
+const questions = [
+
+    {
+        level: "LEVEL 1 — JEJAK SUBJEK",
+
+        question:
+        "Manakah ayat yang menunjukkan peluasan subjek?",
+
+        answers: [
+
+            "A. Murid itu membaca buku cerita.",
+
+            "B. Murid Tahun 5 Bestari itu membaca buku.",
+
+            "C. Murid itu membaca buku di perpustakaan."
+
+        ],
+
+        correct: 1,
+
+        explanation:
+        "Betul! Subjek 'Murid itu' diperluas menjadi 'Murid Tahun 5 Bestari itu'."
+    },clue: "Subjek yang lebih panjang mempunyai penerang."
+
+
+    {
+        level: "LEVEL 2 — JEJAK PREDIKAT",
+
+        question:
+        "Manakah ayat yang menunjukkan peluasan predikat?",
+
+        answers: [
+
+            "A. Aiman yang rajin melayari internet.",
+
+            "B. Aiman melayari internet untuk mencari maklumat.",
+
+            "C. Aiman Tahun 5 melayari internet."
+
+        ],
+
+        correct: 1,
+
+        explanation:
+        "Betul! Predikat 'melayari internet' diperluas dengan 'untuk mencari maklumat'."
+    },
+
+clue: "Predikat boleh diperluas dengan keterangan."
+    {
+        level: "LEVEL 3 — DETEKTIF SUBJEK",
+
+        question:
+        "Yang manakah merupakan peluasan subjek?",
+
+        answers: [
+
+            "A. membaca buku di perpustakaan",
+
+            "B. pada waktu petang",
+
+            "C. Murid Tahun 5 Bestari yang rajin"
+
+        ],
+
+        correct: 2,
+
+        explanation:
+        "Betul! Frasa 'Murid Tahun 5 Bestari yang rajin' memberikan maklumat tambahan tentang subjek."
+    },
+
+clue: "Cari bahagian subjek yang mempunyai penerang."
+    {
+        level: "LEVEL 4 — MISTERI AYAT MAJMUK",
+
+        question:
+        "Siti membaca buku. Siti mencari maklumat. Apakah ayat majmuk yang betul?",
+
+        answers: [
+
+            "A. Siti membaca buku dan mencari maklumat.",
+
+            "B. Siti membaca buku kerana mencari maklumat.",
+
+            "C. Siti membaca buku atau mencari maklumat."
+
+        ],
+
+        correct: 0,
+
+        explanation:
+        "Betul! Kata hubung 'dan' digunakan untuk menggabungkan dua perkara."
+    },
+clue: "Ayat majmuk boleh menggabungkan dua perbuatan."
+
+    {
+        level: "LEVEL 5 — SERANGAN KATA HUBUNG",
+
+        question:
+        "Kumar membawa payung ______ hari hujan.",
+
+        answers: [
+
+            "A. dan",
+
+            "B. kerana",
+
+            "C. atau"
+
+        ],
+
+        correct: 1,
+
+        explanation:
+        "Betul! 'Kerana' digunakan untuk menunjukkan sebab."
+    },
+clue: "Cari kata hubung yang menunjukkan sebab."
+
+    {
+        level: "LEVEL 6 — MISI TERAKHIR",
+
+        question:
+        "Pilih ayat majmuk yang mempunyai peluasan yang sesuai.",
+
+        answers: [
+
+            "A. Puan Aminah dan Puan Zila pengusaha sambal belacan yang terkenal di kampung mereka.",
+
+            "B. Puan Aminah atau Puan Zila mengusahakan sambal.",
+
+            "C. Puan Aminah mengusahakan sambal kerana Puan Zila."
+
+        ],
+
+        correct: 0,
+
+        explanation:
+        "Hebat! Ayat ini menggabungkan subjek dan memberikan maklumat tambahan tentang sambal belacan serta pengusahanya."
+    }
+clue: "Ayat boleh mempunyai peluasan dan gabungan maklumat."
+];
+
+
+function startGame() {
+
+    document
+    .getElementById("startScreen")
+    .classList.add("hidden");
+
+    document
+    .getElementById("gameScreen")
+    .classList.remove("hidden");
+
+    showQuestion();
+
+}
+
+
+function showQuestion() {
+
+    let q = questions[currentQuestion];
+let progress =
+    ((currentQuestion + 1) / questions.length) * 100;
+
+document.getElementById("progressBar").style.width =
+    progress + "%";
+    document.getElementById("level").textContent =
+        currentQuestion + 1;
+
+    document.getElementById("question").textContent =
+        q.question;
+
+    document.getElementById("levelTitle").textContent =
+        q.level;
+
+    document.getElementById("score").textContent =
+        score;
+
+    document.getElementById("lives").textContent =
+        lives;
+
+    let answersDiv =
+        document.getElementById("answers");
+
+    answersDiv.innerHTML = "";
+
+    document
+    .getElementById("feedback")
+    .className = "hidden";
+
+    document
+    .getElementById("nextButton")
+    .classList.add("hidden");
+
+
+    q.answers.forEach((answer, index) => {
+
+        let button =
+            document.createElement("button");
+
+        button.className =
+            "answer-button";
+
+        button.textContent =
+            answer;
+
+        button.onclick = function() {
+
+            checkAnswer(index);
+
+        };
+
+        answersDiv.appendChild(button);
+
+    });
+
+}
+
+
+function checkAnswer(selected) {
+
+    let q = questions[currentQuestion];
+
+    let feedback =
+        document.getElementById("feedback");
+
+
+    if (selected === q.correct) {
+
+        score += 20;
+
+        feedback.className =
+            "feedback correct";
+
+        feedback.innerHTML =
+            "🎉 BETUL! +20 mata<br><br>" +
+            q.explanation;
+
+    }
+
+    else {
+
+        lives--;
+if (lives <= 0) {
+    setTimeout(() => {
+        alert("🚨 NYAWA HABIS! MISI GAGAL!");
+        location.reload();
+    }, 500);
+}
+        feedback.className =
+            "feedback wrong";
+
+        feedback.innerHTML =
+            "❌ BELUM TEPAT!<br><br>" +
+            q.explanation;
+
+    }
+
+
+    document.getElementById("score").textContent =
+        score;
+
+    document.getElementById("lives").textContent =
+        lives;
+
+
+    let buttons =
+        document.querySelectorAll(".answer-button");
+
+    buttons.forEach(button => {
+
+        button.disabled = true;
+
+    });
+
+
+    document
+    .getElementById("nextButton")
+    .classList.remove("hidden");
+let clue = document.getElementById("clue");
+let clueText = document.getElementById("clueText");
+
+clueText.textContent = q.clue;
+clue.classList.remove("hidden");
+}
+
+
+function nextQuestion() {
+
+    currentQuestion++;
+
+    if (currentQuestion >= questions.length) {
+
+        showEndScreen();
+
+    }
+
+    else {
+
+        showQuestion();
+
+    }
+
+}
+
+
+function showEndScreen() {
+
+    document
+    .getElementById("gameScreen")
+    .classList.add("hidden");
+
+    document
+    .getElementById("endScreen")
+    .classList.remove("hidden");
+
+
+    document.getElementById("finalScore").textContent =
+        score;
+
+
+    let rank = "";
+
+    let stars = "";
+
+
+    if (score >= 100) {
+
+        rank =
+            "🕵️ DETEKTIF LUAR BIASA!";
+
+        stars =
+            "⭐⭐⭐";
+
+    }
+
+    else if (score >= 60) {
+
+        rank =
+            "🕵️ DETEKTIF PAKAR!";
+
+        stars =
+            "⭐⭐";
+
+    }
+
+    else {
+
+        rank =
+            "🕵️ DETEKTIF BARU";
+
+        stars =
+            "⭐";
+
+    }
+
+
+    document.getElementById("finalRank").textContent =
+        rank;
+
+    document.getElementById("finalStars").textContent =
+        stars;
+
+}
+
+</script>
+
+</body>
+
+</html>
